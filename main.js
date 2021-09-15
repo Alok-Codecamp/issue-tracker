@@ -29,18 +29,21 @@ const fetchIssues = () => {
   const issuesList = document.getElementById('issuesList');
   issuesList.innerHTML = '';
 
-  for (var i = 0; i < issues.length; i++) {
-    const {id, description, severity, assignedTo, status} = issues[i];
-
-    issuesList.innerHTML +=   `<div class="well">
-                              <h6>Issue ID: ${id} </h6>
-                              <p><span class="label label-info"> ${status} </span></p>
-                              <h3> ${description} </h3>
-                              <p><span class="glyphicon glyphicon-time"></span> ${severity}</p>
-                              <p><span class="glyphicon glyphicon-user"></span> ${assignedTo}</p>
-                              <a href="#" onclick="closeIssue(${id})" class="btn btn-warning">Close</a>
-                              <a href="#" onclick="deleteIssue(${id})" class="btn btn-danger">Delete</a>
-                              </div>`;
+  if(issues!==null){
+    for (var i = 0; i < issues.length; i++) {
+      const {id, description, severity, assignedTo, status} = issues[i];
+  
+      issuesList.innerHTML +=   `<div class="well">
+                                  ${id}
+                                <h6 id='issue-id'>Issue ID:<span> ${id}</span> </h6>
+                                <p><span class="label label-info"> ${status} </span></p>
+                                <h3> ${description} </h3>
+                                <p><span class="glyphicon glyphicon-time"></span> ${severity}</p>
+                                <p><span class="glyphicon glyphicon-user"></span> ${assignedTo}</p>
+                                <a href="#" onclick="closeIssue(${id})" class="btn btn-warning">Close</a>
+                                <a href="#" onclick="deleteIssue(${id})" class="btn btn-danger">Delete</a>
+                                </div>`;
+    }
   }
 }
 const closeIssue = id => {
@@ -63,15 +66,27 @@ const closeIssue = id => {
 }
 
 const deleteIssue = id => {
+  const div=document.querySelectorAll('.well')
+  // const issueId=document.getElementById()
+  // console.log(id)
+  
+  
   const issues = JSON.parse(localStorage.getItem('issues'));
-  console.log(issues)
+  // console.log(issues)
   let remainingIssues;
   for(let i=0;i<issues.length;i++){
-    if(issues[i].id==id){
-      localStorage.removeItem('issues')
-      console.log(issues[i]);
+    const first=div[i].firstChild.textContent;
+    // console.log()
+    if(parseInt(first)===id){
+      div[i].remove()
     }
-    
-  ;
+    if(issues[i].id==id){
+      issues.pop();
+      localStorage.setItem('issues',JSON.stringify(issues))
+      console.log(issues)
+      if(issues.length==0){
+        localStorage.removeItem('issues')
+      }
+}
 }
 }
